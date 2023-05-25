@@ -28,7 +28,7 @@
         "bootstrap-toggle": "^2.2.2",
         "chart.js": "^2.8.0",
         "history": "^4.10.0",
-        "jquery": "^1.9.1",
+        "jquery": "^3.7.0",
         "moment": "^2.24.0",
         "query-string": "^6.4.0",
         "react": "16.8.5",
