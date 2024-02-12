@@ -5,7 +5,6 @@
 
 import * as moment from "moment";
 import * as React from "react";
-import NotificationSystem = require("react-notification-system");
 import { Button, ButtonGroup, Col, Container, Input, Modal, ModalBody, ModalFooter, ModalHeader, Row, Table } from "reactstrap";
 import LogRestClient from "../api/LogRestClient";
 import LogLevelToCssClassConverter from "../converter/LogLevelToCssClassConverter";
@@ -66,7 +65,7 @@ export default class Logger extends React.Component<LogPropsModel, LogStateModel
         return (
             <div>
                 <Container fluid={true}>
-                    <Row style={{marginTop: "15px"}}>
+                    <Row style={{ marginTop: "15px" }}>
                         <Col md={2} className="font-bold font-small">Filter by log level:</Col>
                         <Col md={2}>
                             <Input type="select" value={this.state.FilterLogLevel}
@@ -82,20 +81,20 @@ export default class Logger extends React.Component<LogPropsModel, LogStateModel
                         <Col md={2} className="font-bold font-small">Max. log entries:</Col>
                         <Col md={2}>
                             <Input type="text" value={this.state.IntermediateMaxLogEntries}
-                                   onChange={(e: React.FormEvent<HTMLInputElement>) => this.onChangeMaxEntries(e)}
-                                   onBlur={this.onApplyMaxEntries.bind(this)} />
+                                onChange={(e: React.FormEvent<HTMLInputElement>) => this.onChangeMaxEntries(e)}
+                                onBlur={this.onApplyMaxEntries.bind(this)} />
                         </Col>
                         <Col md={1} />
                         <Col md={3}>
                             <ButtonGroup className="float-right">
                                 <Button color="primary" onClick={this.clearLogMessages.bind(this)} disabled={this.state.LogMessages.length === 0}>Clear log messages</Button>
-                                { this.props.onCloseTab != null &&
+                                {this.props.onCloseTab != null &&
                                     <Button color="primary" onClick={() => this.props.onCloseTab(this.props.Logger)}>Close tab</Button>
                                 }
                             </ButtonGroup>
                         </Col>
                     </Row>
-                    <Row style={{marginTop: "10px"}}>
+                    <Row style={{ marginTop: "10px" }}>
                         <Col md={12}>
                             <Table size="sm">
                                 <thead>
@@ -107,11 +106,11 @@ export default class Logger extends React.Component<LogPropsModel, LogStateModel
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    { this.state.LogMessages.length !== 0 && (
+                                    {this.state.LogMessages.length !== 0 && (
                                         this.preRenderLogMessages()
                                     )}
                                 </tbody>
-                                { this.state.LogMessages.length === 0 && (
+                                {this.state.LogMessages.length === 0 && (
                                     <tbody>
                                         <tr>
                                             <td>
@@ -124,9 +123,9 @@ export default class Logger extends React.Component<LogPropsModel, LogStateModel
                         </Col>
                     </Row>
                 </Container>
-                { this.state.SelectedLogMessage != null &&
+                {this.state.SelectedLogMessage != null &&
                     <Modal isOpen={this.state.IsLogDetailDialogOpen} className="log-modal-dialog">
-                        <ModalHeader tag="h2" style={{background: LogLevelToCssClassConverter.Convert(this.state.SelectedLogMessage.logLevel)}}>
+                        <ModalHeader tag="h2" style={{ background: LogLevelToCssClassConverter.Convert(this.state.SelectedLogMessage.logLevel) }}>
                             Log message from {moment(this.state.SelectedLogMessage.timestamp).format("YYYY-MM-DD HH:mm:ss")} ({this.state.SelectedLogMessage.className})
                         </ModalHeader>
                         <ModalBody>
@@ -162,7 +161,7 @@ export default class Logger extends React.Component<LogPropsModel, LogStateModel
     }
 
     private onFilterLogLevelChange(e: React.FormEvent<HTMLInputElement>): void {
-        const newValue = (e.target as HTMLSelectElement).value  as LogLevel;
+        const newValue = (e.target as HTMLSelectElement).value as LogLevel;
         this.setState({ FilterLogLevel: newValue, FilteredLogMessages: Logger.applyFilter(this.state.LogMessages, newValue, this.state.MaxLogEntries) });
     }
 
@@ -198,7 +197,7 @@ export default class Logger extends React.Component<LogPropsModel, LogStateModel
         return this.state.FilteredLogMessages.map((message, idx) =>
             <tr key={idx}
                 className={"selectable"}
-                style={{background: LogLevelToCssClassConverter.Convert(message.logLevel)}}
+                style={{ background: LogLevelToCssClassConverter.Convert(message.logLevel) }}
                 onClick={this.onShowLogMessageDetailed.bind(this, message)}>
                 <td>{moment(message.timestamp).format("YYYY-MM-DD HH:mm:ss")}</td>
                 <td>{LogLevel[message.logLevel]}</td>

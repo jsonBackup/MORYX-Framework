@@ -6,8 +6,8 @@
 import { mdiFormatListBulletedSquare, mdiSquareEditOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import * as React from "react";
-import NotificationSystem = require("react-notification-system");
 import { connect } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
 import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
 import TreeMenu from "../../common/components/Menu/TreeMenu";
 import MenuModel from "../../common/models/MenuModel";
@@ -24,7 +24,6 @@ import { updateLoggers } from "../redux/LogActions";
 interface LogPropsModel {
     RestClient?: LogRestClient;
     Loggers?: LoggerModel[];
-    NotificationSystem?: NotificationSystem;
 }
 
 interface LogDispatchPropModel {
@@ -34,8 +33,7 @@ interface LogDispatchPropModel {
 const mapStateToProps = (state: AppState): LogPropsModel => {
     return {
         RestClient: state.Log.RestClient,
-        Loggers: state.Log.Loggers,
-        NotificationSystem: state.Common.NotificationSystem,
+        Loggers: state.Log.Loggers
     };
 };
 
@@ -66,21 +64,21 @@ class Log extends React.Component<LogPropsModel & LogDispatchPropModel, LogState
     public componentDidMount(): void {
         this.props.RestClient.loggers().then((data) => {
             this.props.onUpdateLoggers(data);
-            this.setState({Menu: { MenuItems: data.map((logger, idx) => this.createMenuItem(logger)) } });
+            this.setState({ Menu: { MenuItems: data.map((logger, idx) => this.createMenuItem(logger)) } });
         });
     }
 
     public createMenuItem(logger: LoggerModel): LogMenuItem {
         const menuItem: LogMenuItem = {
-                Name: LoggerModel.shortLoggerName(logger),
-                NavPath: "/log",
-                Logger: logger,
-                SubMenuItems: logger.childLogger.map((childLogger, idx) => this.createMenuItem(childLogger)),
-            };
+            Name: LoggerModel.shortLoggerName(logger),
+            NavPath: "/log",
+            Logger: logger,
+            SubMenuItems: logger.childLogger.map((childLogger, idx) => this.createMenuItem(childLogger)),
+        };
 
         menuItem.Content = (<LogMenuItemContent Logger={menuItem.Logger}
-                                                onActiveLogLevelChange={this.onActiveLogLevelChange.bind(this)}
-                                                onLabelClicked={this.onMenuItemClicked.bind(this)} />);
+            onActiveLogLevelChange={this.onActiveLogLevelChange.bind(this)}
+            onLabelClicked={this.onMenuItemClicked.bind(this)} />);
         return menuItem;
     }
 
@@ -93,10 +91,9 @@ class Log extends React.Component<LogPropsModel & LogDispatchPropModel, LogState
                 logger.activeLevel = newValue;
                 Log.changeActiveLogLevel(logger, newValue);
                 this.forceUpdate();
-
-                this.props.NotificationSystem.addNotification({ title: "Success", message: "Log level for '" + logger.name +  "' was set successfully", level: "success", autoDismiss: 5 });
+                toast.success("Log level for '" + logger.name + "' was set successfully", { autoClose: 5000 });
             } else {
-                this.props.NotificationSystem.addNotification({ title: "Error", message: data.errorMessage, level: "error", autoDismiss: 5 });
+                toast.error(data.errorMessage, { autoClose: 5000 });
             }
         });
     }
@@ -112,19 +109,19 @@ class Log extends React.Component<LogPropsModel & LogDispatchPropModel, LogState
     }
 
     private toggleTab(tabName: string): void {
-        this.setState({ActiveTab: tabName});
+        this.setState({ ActiveTab: tabName });
     }
 
     private onMenuItemClicked(logger: LoggerModel): void {
-       const idx = this.state.LoggerTabs.indexOf(logger);
-       if (idx === -1) {
+        const idx = this.state.LoggerTabs.indexOf(logger);
+        if (idx === -1) {
             this.setState((prevState) => ({
                 LoggerTabs: [...prevState.LoggerTabs, logger],
                 ActiveTab: (prevState.LoggerTabs.length + 1).toString(),
             }));
-       } else {
+        } else {
             this.setState({ ActiveTab: (idx + 1).toString() });
-       }
+        }
     }
 
     private onCloseTab(logger: LoggerModel): void {

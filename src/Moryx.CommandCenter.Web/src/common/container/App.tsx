@@ -4,9 +4,9 @@
 */
 
 import * as React from "react";
-import NotificationSystem = require("react-notification-system");
 import { connect } from "react-redux";
 import { Redirect, Route, RouteComponentProps, Switch, withRouter } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import { Container } from "reactstrap";
 import DatabasesRestClient from "../../databases/api/DatabasesRestClient";
 import Databases from "../../databases/container/Databases";
@@ -23,9 +23,10 @@ import ApplicationLoadResponse from "../api/responses/ApplicationLoadResponse";
 import HostInformationResponse from "../api/responses/HostInformationResponse";
 import SystemLoadResponse from "../api/responses/SystemLoadResponse";
 import { AppState } from "../redux/AppState";
-import { updateIsConnected, updateNotificationInstance, updateServerTime } from "../redux/CommonActions";
+import { updateIsConnected, updateServerTime } from "../redux/CommonActions";
 import { ActionType } from "../redux/Types";
 import "../scss/commandcenter.scss";
+import "react-toastify/dist/ReactToastify.css";
 
 interface AppPropModel {
   ModulesRestClient: ModulesRestClient;
@@ -47,7 +48,6 @@ interface AppDispatchPropModel {
   onUpdateModuleHealthState?(moduleName: string, healthState: ModuleServerModuleState): void;
   onUpdateModuleNotifications?(moduleName: string, notifications: NotificationModel[]): void;
   onUpdateIsConnected?(isConnected: boolean): void;
-  onUpdateNotificationSystemInstance?(notificationSystem: NotificationSystem): void;
 }
 
 const mapStateToProps = (state: AppState): AppPropModel => {
@@ -64,22 +64,19 @@ const mapStateToProps = (state: AppState): AppPropModel => {
 
 const mapDispatchToProps = (dispatch: React.Dispatch<ActionType<{}>>): AppDispatchPropModel => {
   return {
-        onUpdateServerTime: (serverTime: string) => dispatch(updateServerTime(serverTime)),
-        onUpdateModules: (modules: ServerModuleModel[]) => dispatch(updateModules(modules)),
-        onUpdateModuleHealthState: (moduleName: string, healthState: ModuleServerModuleState) =>
-        dispatch(updateHealthState(moduleName, healthState)),
-        onUpdateModuleNotifications: (moduleName: string, notifications: NotificationModel[]) =>
-        dispatch(updateNotifications(moduleName, notifications)),
-        onUpdateIsConnected: (isConnected: boolean) => dispatch(updateIsConnected(isConnected)),
-        onUpdateNotificationSystemInstance: (notificationSystem: NotificationSystem) =>
-        dispatch(updateNotificationInstance(notificationSystem)),
+    onUpdateServerTime: (serverTime: string) => dispatch(updateServerTime(serverTime)),
+    onUpdateModules: (modules: ServerModuleModel[]) => dispatch(updateModules(modules)),
+    onUpdateModuleHealthState: (moduleName: string, healthState: ModuleServerModuleState) =>
+      dispatch(updateHealthState(moduleName, healthState)),
+    onUpdateModuleNotifications: (moduleName: string, notifications: NotificationModel[]) =>
+      dispatch(updateNotifications(moduleName, notifications)),
+    onUpdateIsConnected: (isConnected: boolean) => dispatch(updateIsConnected(isConnected))
   };
 };
 
 class App extends React.Component<AppPropModel & RouteComponentProps<{}> & AppDispatchPropModel> {
   private updateClockTimer: NodeJS.Timeout;
   private updateLoadAndModulesTimer: NodeJS.Timeout;
-  private notificationSystem: NotificationSystem = null;
 
   constructor(props: AppPropModel & RouteComponentProps<{}> & AppDispatchPropModel) {
     super(props);
@@ -98,17 +95,10 @@ class App extends React.Component<AppPropModel & RouteComponentProps<{}> & AppDi
   }
 
   public render(): React.ReactNode {
-    const ref = (instance: NotificationSystem) => {
-      if (this.notificationSystem == null) {
-        this.notificationSystem = instance;
-        this.props?.onUpdateNotificationSystemInstance(instance);
-      }
-    };
-
     return (
       <div className="commandcenter-app-container">
         <div className="commandcenter-content-wrapper">
-          <NotificationSystem ref={ref} />
+          <ToastContainer />
 
           <Container fluid={true} id="body" className="content">
             <Switch>
@@ -135,5 +125,5 @@ class App extends React.Component<AppPropModel & RouteComponentProps<{}> & AppDi
 }
 
 export default withRouter<RouteComponentProps<{}>, React.ComponentType<any>>(
-connect<AppPropModel, AppDispatchPropModel>(mapStateToProps, mapDispatchToProps)(App)
+  connect<AppPropModel, AppDispatchPropModel>(mapStateToProps, mapDispatchToProps)(App)
 );

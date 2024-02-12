@@ -3,10 +3,9 @@
  * Licensed under the Apache License, Version 2.0
 */
 
-import {mdiCogs, mdiComment, mdiConsoleLine, mdiDatabase, mdiHexagon, mdiHexagonMultiple} from "@mdi/js";
+import { mdiCogs, mdiComment, mdiConsoleLine, mdiDatabase, mdiHexagon, mdiHexagonMultiple } from "@mdi/js";
 import Icon from "@mdi/react";
 import * as React from "react";
-import NotificationSystem = require("react-notification-system");
 import { connect } from "react-redux";
 import { Link, Route, Switch } from "react-router-dom";
 import { Card, CardBody, CardHeader, Col, ListGroup, NavLink, Row } from "reactstrap";
@@ -31,7 +30,6 @@ interface ModulesPropModel {
     RestClient: ModulesRestClient;
     Modules: ServerModuleModel[];
     Configs: IConfig[];
-    NotificationSystem?: NotificationSystem;
 }
 
 interface ModulesDispatchPropModel {
@@ -48,8 +46,7 @@ const mapStateToProps = (state: AppState): ModulesPropModel => {
     return {
         RestClient: state.Modules.RestClient,
         Modules: state.Modules.Modules,
-        Configs: state.Modules.Configs,
-        NotificationSystem: state.Common.NotificationSystem,
+        Configs: state.Modules.Configs
     };
 };
 
@@ -84,22 +81,22 @@ class Modules extends React.Component<ModulesPropModel & ModulesDispatchPropMode
             Name: moduleModel.name,
             NavPath: "/modules/" + moduleModel.name,
             Icon: mdiHexagon,
-            Content: (<span className="font-small" style={{float: "right"}}><HealthStateBadge HealthState={moduleModel.healthState} /></span>),
+            Content: (<span className="font-small" style={{ float: "right" }}><HealthStateBadge HealthState={moduleModel.healthState} /></span>),
             SubMenuItems:
-            [
-                {
-                    Name: "Configuration",
-                    NavPath: "/modules/" + moduleModel.name + "/configuration",
-                    Icon: mdiCogs,
-                    SubMenuItems: [],
-                },
-                {
-                    Name: "Console",
-                    NavPath: "/modules/" + moduleModel.name + "/console",
-                    Icon: mdiConsoleLine,
-                    SubMenuItems: [],
-                },
-            ],
+                [
+                    {
+                        Name: "Configuration",
+                        NavPath: "/modules/" + moduleModel.name + "/configuration",
+                        Icon: mdiCogs,
+                        SubMenuItems: [],
+                    },
+                    {
+                        Name: "Console",
+                        NavPath: "/modules/" + moduleModel.name + "/console",
+                        Icon: mdiConsoleLine,
+                        SubMenuItems: [],
+                    },
+                ],
         };
     }
 
@@ -108,20 +105,18 @@ class Modules extends React.Component<ModulesPropModel & ModulesDispatchPropMode
         let idx = 0;
 
         this.state.MenuModel.MenuItems.forEach((menuItem) => {
-            const module = this.props.Modules.filter(function(element: ServerModuleModel, index: number, array: ServerModuleModel[]): boolean { return element.name === menuItem.Name; })[0];
-            routes.push(<Route key={idx} path={menuItem.NavPath} exact={true} render={() => <Module Module={module} RestClient={this.props.RestClient} />}/>);
+            const module = this.props.Modules.filter(function (element: ServerModuleModel, index: number, array: ServerModuleModel[]): boolean { return element.name === menuItem.Name; })[0];
+            routes.push(<Route key={idx} path={menuItem.NavPath} exact={true} render={() => <Module Module={module} RestClient={this.props.RestClient} />} />);
 
             menuItem.SubMenuItems.forEach((subMenuItem) => {
                 if (subMenuItem.NavPath.endsWith("configuration")) {
                     routes.push(<Route key={idx} path={subMenuItem.NavPath} exact={true}
-                                    render={() => <ModuleConfiguration ModuleName={module.name}
-                                                                       RestClient={this.props.RestClient}
-                                                                       NotificationSystem={this.props.NotificationSystem} />}/>);
+                        render={() => <ModuleConfiguration ModuleName={module.name}
+                            RestClient={this.props.RestClient} />} />);
                 } else if (subMenuItem.NavPath.endsWith("console")) {
                     routes.push(<Route key={idx} path={subMenuItem.NavPath} exact={true}
-                                    render={() => <ModuleConsole ModuleName={module.name}
-                                                                 RestClient={this.props.RestClient}
-                                                                 NotificationSystem={this.props.NotificationSystem} />}/>);
+                        render={() => <ModuleConsole ModuleName={module.name}
+                            RestClient={this.props.RestClient} />} />);
                 }
 
                 ++idx;
@@ -139,22 +134,22 @@ class Modules extends React.Component<ModulesPropModel & ModulesDispatchPropMode
                 <Col md={3}>
                     <Card>
                         <CardHeader tag="h5">
-                        <Navbar className="navbar-default" expand="md">
-                            <Nav className="navbar-left" navbar={true}>
-                                <NavItem className="active">
-                                    <NavLink to="/modules" className="navbar-nav-link">
-                                        <Icon path={mdiHexagonMultiple} className="icon right-space" />
-                                        Modules
-                                    </NavLink>
-                                </NavItem>
-                                <NavItem >
-                                    <Link to="/databases" className="navbar-nav-link">
-                                        <Icon path={mdiDatabase}className="icon right-space" />
-                                        Databases
-                                    </Link>
-                                </NavItem>
-                            </Nav>
-                        </Navbar>
+                            <Navbar className="navbar-default" expand="md">
+                                <Nav className="navbar-left" navbar={true}>
+                                    <NavItem className="active">
+                                        <NavLink to="/modules" className="navbar-nav-link">
+                                            <Icon path={mdiHexagonMultiple} className="icon right-space" />
+                                            Modules
+                                        </NavLink>
+                                    </NavItem>
+                                    <NavItem >
+                                        <Link to="/databases" className="navbar-nav-link">
+                                            <Icon path={mdiDatabase} className="icon right-space" />
+                                            Databases
+                                        </Link>
+                                    </NavItem>
+                                </Nav>
+                            </Navbar>
                         </CardHeader>
                         <ListGroup>
                             <RoutingMenu Menu={this.state.MenuModel} />
