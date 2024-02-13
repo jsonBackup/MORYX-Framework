@@ -7,6 +7,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, RouteComponentProps, Switch, withRouter } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Container } from "reactstrap";
 import DatabasesRestClient from "../../databases/api/DatabasesRestClient";
 import Databases from "../../databases/container/Databases";
@@ -26,7 +27,6 @@ import { AppState } from "../redux/AppState";
 import { updateIsConnected, updateServerTime } from "../redux/CommonActions";
 import { ActionType } from "../redux/Types";
 import "../scss/commandcenter.scss";
-import "react-toastify/dist/ReactToastify.css";
 
 interface AppPropModel {
   ModulesRestClient: ModulesRestClient;
