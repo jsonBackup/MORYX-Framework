@@ -104,7 +104,7 @@ class App extends React.Component<AppPropModel & RouteComponentProps<{}> & AppDi
             <Switch>
               <Route path="/modules" component={Modules} />
               <Route path="/databases" component={Databases} />
-              <Redirect to="/databases" />
+              <Route render={() => <Redirect to="/databases" />} />
             </Switch>
           </Container>
         </div>

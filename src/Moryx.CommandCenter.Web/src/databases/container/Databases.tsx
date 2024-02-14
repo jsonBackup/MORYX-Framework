@@ -83,7 +83,10 @@ class Database extends React.Component<DatabasesPropsModel & DatabasesDispatchPr
         let idx = 0;
 
         this.props.DatabaseConfigs.forEach((model) => {
-            routes.push(<Route key={idx} path={"/databases/" + model.targetModel} exact={true} render={() => <DatabaseModel DataModel={model} RestClient={this.props.RestClient} />} />);
+            routes.push(
+                <Route key={idx} path={`/databases/${model.targetModel}`} exact={true}>
+                    <DatabaseModel DataModel={model} RestClient={this.props.RestClient} />
+                </Route>);
             ++idx;
         });
 
@@ -124,7 +127,7 @@ class Database extends React.Component<DatabasesPropsModel & DatabasesDispatchPr
                 </Col>
                 <Col md={9}>
                     <Switch>
-                        <Route exact={true} path="/databases" render={() =>
+                        <Route exact={true} path="/databases">
                             <Card>
                                 <CardHeader tag="h4">
                                     <Icon path={mdiComment} className="icon right-space" />
@@ -134,7 +137,7 @@ class Database extends React.Component<DatabasesPropsModel & DatabasesDispatchPr
                                     <span className="font-italic font-small">Configure all available database models. Please select a database model to proceed...</span>
                                 </CardBody>
                             </Card>
-                        } />
+                        </Route>
                         {this.preRenderRoutesList()}
                     </Switch>
                 </Col>

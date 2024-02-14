@@ -103,17 +103,22 @@ class Modules extends React.Component<ModulesPropModel & ModulesDispatchPropMode
 
         this.state.MenuModel.MenuItems.forEach((menuItem) => {
             const module = this.props.Modules.filter(function (element: ServerModuleModel, index: number, array: ServerModuleModel[]): boolean { return element.name === menuItem.Name; })[0];
-            routes.push(<Route key={idx} path={menuItem.NavPath} exact={true} render={() => <Module Module={module} RestClient={this.props.RestClient} />} />);
+            routes.push(
+                <Route key={idx} path={menuItem.NavPath} exact={true}>
+                    <Module Module={module} RestClient={this.props.RestClient} />
+                </Route>);
 
             menuItem.SubMenuItems.forEach((subMenuItem) => {
                 if (subMenuItem.NavPath.endsWith("configuration")) {
-                    routes.push(<Route key={idx} path={subMenuItem.NavPath} exact={true}
-                        render={() => <ModuleConfiguration ModuleName={module.name}
-                            RestClient={this.props.RestClient} />} />);
+                    routes.push(
+                        <Route key={idx} path={subMenuItem.NavPath} exact={true}>
+                            <ModuleConfiguration ModuleName={module.name} RestClient={this.props.RestClient} />
+                        </Route>);
                 } else if (subMenuItem.NavPath.endsWith("console")) {
-                    routes.push(<Route key={idx} path={subMenuItem.NavPath} exact={true}
-                        render={() => <ModuleConsole ModuleName={module.name}
-                            RestClient={this.props.RestClient} />} />);
+                    routes.push(
+                        <Route key={idx} path={subMenuItem.NavPath} exact={true}>
+                            <ModuleConsole ModuleName={module.name} RestClient={this.props.RestClient} />
+                        </Route>);
                 }
 
                 ++idx;
@@ -155,7 +160,7 @@ class Modules extends React.Component<ModulesPropModel & ModulesDispatchPropMode
                 </Col>
                 <Col md={9}>
                     <Switch>
-                        <Route exact={true} path="/modules" render={() =>
+                        <Route exact={true} path="/modules" >
                             <Card>
                                 <CardHeader tag="h4">
                                     <Icon path={mdiComment} className="icon right-space" />
@@ -165,7 +170,7 @@ class Modules extends React.Component<ModulesPropModel & ModulesDispatchPropMode
                                     <span className="font-italic font-small">Watch, configure and maintain all available modules. Please select a module to proceed...</span>
                                 </CardBody>
                             </Card>
-                        } />
+                        </Route>
                         {this.preRenderRoutesList()}
                     </Switch>
                 </Col>
