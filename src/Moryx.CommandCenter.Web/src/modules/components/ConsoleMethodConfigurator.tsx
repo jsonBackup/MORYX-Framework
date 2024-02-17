@@ -47,8 +47,6 @@ function ConsoleMethodConfigurator(props: ConsoleMethodConfiguratorPropModel) {
                                     ParentEntry={null}
                                     Root={props.Method.parameters}
                                     IsReadOnly={false}
-                                    Navigate={navigate}
-                                    Location={location}
                                 />
                             )}
                         </Col>

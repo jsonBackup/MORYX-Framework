@@ -95,9 +95,7 @@ function ModuleConfiguration(props: ModuleConfigurationPropModel) {
                 <NavigableConfigEditor ParentEntry={moduleConfig.ParentEntry}
                     Entries={moduleConfig.CurrentSubEntries}
                     Root={moduleConfig.ModuleConfig.root}
-                    IsReadOnly={false}
-                    Navigate={navigate}
-                    Location={location} />
+                    IsReadOnly={false} />
 
                 <ButtonGroup className="up-space-lg">
                     <Button color="primary" onClick={() => onApply()}>

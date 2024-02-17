@@ -44,9 +44,7 @@ function ConsoleMethodResult(props: ConsoleMethodResultPropModel) {
                                 Entries={props.InvokeResult.subEntries}
                                 ParentEntry={null}
                                 Root={props.InvokeResult}
-                                IsReadOnly={true}
-                                Navigate={navigate}
-                                Location={location} />
+                                IsReadOnly={true} />
                         </Col>
                     </Row>
                     <Row className="up-space-lg">
