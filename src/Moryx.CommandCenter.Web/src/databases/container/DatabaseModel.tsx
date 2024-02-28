@@ -5,11 +5,12 @@
 
 import { mdiBriefcase, mdiCheck, mdiDatabase, mdiExclamationThick, mdiLoading, mdiPowerPlug, mdiTable } from "@mdi/js";
 import Icon from "@mdi/react";
+import { Button, ButtonGroup } from "@mui/material";
 import * as moment from "moment";
 import * as React from "react";
 import { connect } from "react-redux";
 import { toast } from "react-toastify";
-import { Button, ButtonGroup, Card, CardBody, CardHeader, Col, Container, Form, Input, Nav, NavItem, NavLink, Row, TabContent, TabPane, UncontrolledTooltip } from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Container, Form, Input, Nav, NavItem, NavLink, Row, TabContent, TabPane, UncontrolledTooltip } from "reactstrap";
 import kbToString from "../../common/converter/ByteConverter";
 import { updateShowWaitDialog } from "../../common/redux/CommonActions";
 import { ActionType } from "../../common/redux/Types";
@@ -341,7 +342,7 @@ class DatabaseModel extends React.Component<DatabaseModelPropsModel & DatabaseMo
                                     </Row>
                                     <Row className="up-space-lg">
                                         <Col md={12}>
-                                            <Button color="primary" onClick={() => this.onSave()}>Save</Button>
+                                            <Button  variant="contained" color="primary" onClick={() => this.onSave()}>Save</Button>
                                         </Col>
                                     </Row>
                                 </Container>
@@ -480,7 +481,7 @@ class DatabaseModel extends React.Component<DatabaseModelPropsModel & DatabaseMo
                                                     </Row>
                                                     <Row className="up-space-lg">
                                                         <Col md={12}>
-                                                            <Button color="primary"
+                                                            <Button variant="outlined" color="primary"
                                                                 onClick={() => this.onExecuteSetup()}
                                                                 disabled={this.state.selectedSetup === -1 || this.state.testConnectionResult !== TestConnectionResult.Success}>
                                                                 Execute setup
