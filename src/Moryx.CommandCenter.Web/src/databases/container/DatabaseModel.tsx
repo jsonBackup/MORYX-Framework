@@ -424,7 +424,7 @@ class DatabaseModel extends React.Component<DatabaseModelPropsModel & DatabaseMo
                                                 <Container fluid={true}>
                                                     <Row>
                                                         <Col md={12}>
-                                                            <Input type="select" className="auto-height"
+                                                            <Input type="select" size={10} className="auto-height"
                                                                 onChange={(e: React.FormEvent<HTMLInputElement>) => this.onSelectMigration(e)}>
                                                                 {
                                                                     this.props.DataModel.availableMigrations.map((migration, idx) => {
