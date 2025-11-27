@@ -17,11 +17,12 @@ updates:
       timezone: "Europe/Berlin"
     # Labels on pull requests for security and version updates
     labels:
-      - "nuget" 
+      - "nuget"
       - "dependencies"
   - package-ecosystem: "npm"
-    directory: "src/Moryx.CommandCenter.Web/" 
-    open-pull-requests-limit: 10
+    directories:
+      - "/src/*"
+    open-pull-requests-limit: 100
     schedule:
       interval: "weekly"
       # Check for npm updates on Fridays
@@ -30,5 +31,5 @@ updates:
       timezone: "Europe/Berlin"
     # Labels on pull requests for security and version updates
     labels:
-      - "npm" 
+      - "npm"
       - "dependencies"
